@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Telegram Player All-in-One</title>
+  <style>
+    body { background:#0f1720; color:#e6eef8; font-family:Arial, sans-serif; padding:20px; }
+    .box { max-width:800px; margin:auto; padding:20px; background:#071028; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.5); }
+    input { width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #444; background:#1a2438; color:#fff; }
+    button { padding:10px 16px; border:none; border-radius:6px; background:#1d9bf0; color:white; font-weight:bold; cursor:pointer; }
+    button:hover { background:#1480c8; }
+    .result { margin-top:15px; padding:12px; background:#121d33; border-radius:6px; font-size:14px; word-break:break-all; }
+    iframe { width:100%; height:480px; border:none; border-radius:10px; margin-top:20px; background:#000; }
+    .small { font-size:12px; color:#a8c0d8; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>🎬 Telegram Player & Generator</h2>
+    <p><b>Mode 1:</b> Masukkan link Telegram, dapatkan link Base64 untuk dishare.</p>
+    <input type="text" id="inputLink" placeholder="contoh: https://t.me/namachannel/123" />
+    <button onclick="generate()">🔗 Buat Link Base64</button>
+    <div id="output" class="result" style="display:none"></div>
+
+    <hr style="margin:25px 0; border:1px solid #333;">
+
+    <p><b>Mode 2:</b> Jika file ini dibuka dengan parameter <code>?link=BASE64</code>, otomatis tampil player di bawah 👇</p>
+    <div id="player"></div>
+  </div>
+
+  <script>
+    // Mode 1: Generator Base64
+    function generate(){
+      var link = document.getElementById('inputLink').value.trim();
+      if(!link){
+        alert("Isi dulu link Telegram!");
+        return;
+      }
+      try {
+        var encoded = btoa(link);
+        var resultUrl = window.location.origin + window.location.pathname + "?link=" + encoded;
+        var out = `
+        <b>Link asli:</b><br>${link}<br><br>
+        <b>Base64:</b><br>${encoded}<br><br>
+        <b>URL siap share:</b><br>${resultUrl}
+        `;
+        document.getElementById('output').innerHTML = out;
+        document.getElementById('output').style.display = 'block';
+      } catch(e){
+        alert("Gagal encode link. Pastikan formatnya benar.");
+      }
+    }
+
+    // Mode 2: Player
+    function getParam(name){
+      let url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+    window.onload = function(){
+      var encoded = getParam("link");
+      if(encoded){
+        try {
+          var decoded = atob(encoded);
+          document.getElementById('player').innerHTML = `
+            <h3>▶️ Memutar dari Telegram</h3>
+            <p class="small">Link asli disembunyikan (Base64)</p>
+            <iframe src="${decoded}" allowfullscreen></iframe>
+          `;
+        } catch(e){
+          document.getElementById('player').innerHTML = "<p style='color:red'>Link tidak valid!</p>";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
