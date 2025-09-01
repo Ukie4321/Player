@@ -19,7 +19,7 @@
   <div class="box">
     <h2>🎬 Telegram Player & Generator</h2>
     <p><b>Mode 1:</b> Masukkan link Telegram, dapatkan link Base64 untuk dishare.</p>
-    <input type="text" id="inputLink" placeholder="contoh: https://t.me/namachannel/123" />
+    <input type="text" id="inputLink" placeholder="contoh: https://t.me/mrzybfilm/3578" />
     <button onclick="generate()">🔗 Buat Link Base64</button>
     <div id="output" class="result" style="display:none"></div>
 
